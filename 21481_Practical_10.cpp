@@ -1,317 +1,127 @@
-
-//============================================================================
-// Name        : DSA10_21481.cpp
-// Author      : Atharva Khodke
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
 #include <iostream>
-#include <climits>
+#include <math.h>
 using namespace std;
-
-
-template <class T>
-class MinHeap
+class heap
 {
-	T *arr;		 
-	int capacity; 
-	int size;	  
+	int *arr;
+	int *sortedarr;
+	int totalsize;
+	int pos = -1;
+
 public:
-
-	MinHeap()
+	heap()
 	{
-		capacity = 0;
-		size = 0;
-		arr = NULL;
+		cout << "Size ";
+		cin >> totalsize;
+		arr = new int[totalsize];
+		sortedarr = new int[totalsize];
 	}
-
-	MinHeap(int capacity)
+	heap(int n)
 	{
-		this->capacity = capacity;
-		size = 0;
-		arr = new T[capacity];
+		totalsize = n;
+		arr = new int[totalsize];
+		sortedarr = new int[totalsize];
 	}
-
-
-	void setCapacity(int capacity)
+	void heapify(int i)
 	{
-		this->capacity = capacity;
-		size = 0;
-		arr = new T[capacity];
-	}
-
-	// methods
-	void insert(T data); 
-	T getMin();			 
-
-	void heapify(int i); 
-	void heapify_itr();	 
-	void display();		 
-
-	void remove(int i);			  
-	T extract_min_key();		 
-	void bubble_key_to_top(int i); 
-
-
-	int parent(int i) 	{
-		return (i - 1) / 2;
-	}
-
-	int Lchild(int i) 	{
-		return (2 * 1 + 1);
-	}
-
-	int Rchild(int i) 	{
-		return (2 * 1 + 2);
-	}
-
-	void swap(int a, int b)
-	{
-		
-		T temp = arr[a];
-		arr[a] = arr[b];
-		arr[b] = temp;
-	}
-};
-
-template <class T>
-T *heap_sort(T *arr, int n) 
-{
-	MinHeap<T> heap(n);
-	for (int i = 0; i < n; ++i)
-	{ 
-		heap.insert(arr[i]);
-	}
-	for (int i = 0; i < n; ++i)
-	{ 
-		arr[i] = heap.extract_min_key();
-	}
-
-	return arr;
-}
-
-int main()
-{
-	MinHeap<int> heap;
-	int choice = -1;
-	int temp = 0;
-	int marksLength;
-	int *marks = NULL;
-
-	cout << "# Implementation of Heap DS and Heap Sort\n";
-
-	while (choice)
-	{
-		cout << "\n---------- MENU ----------\n"
-			 << "1. Input Marks of students\n"
-			 << "2. Get minimum marks obtained\n"
-			 << "3. Heap sort on marks\n"
-			 << "4. Display heap\n"
-			 << "5. Exit" << endl;
-		cout << "Enter choice = ";
-		cin >> choice;
-
-		switch (choice)
+		while (1)
 		{
-		case 1: // Input Marks
-		{
-			cout << "Enter no. of entries = ";
-			cin >> marksLength;
-			heap.setCapacity(marksLength);
-			marks = new int[marksLength];
-			cout << "Enter Marks of students =" << endl;
-			for (int i = 0; i < marksLength; ++i)
+			int par = floor((i - 1) / 2);
+			// cout<<arr[i]<<"ka parent "<<arr[par]<<endl;
+			if (arr[par] < arr[i])
 			{
-				cout << "Enter marks of student " << i + 1 << " = ";
-				cin >> marks[i];
-				heap.insert(marks[i]);
-			}
-			break;
-		}
-
-		case 2: // Get minimum marks
-		{
-			temp = heap.getMin();
-			if (temp != -1)
-			{
-				cout << "Minimum marks obtained = " << temp << endl;
+				swap(arr[i], arr[par]);
+				i = par;
 			}
 			else
 			{
-				for (int i = 0; i < marksLength; ++i)
-				{
-					heap.insert(marks[i]);
-				}
-				cout << "Minimum marks obtained = " << heap.getMin() << endl;
+				break;
 			}
-			break;
 		}
-
-		case 3: // Heap Sort
+	}
+	void saveorignal()
+	{
+		for (int i = 0; i < totalsize; i++)
 		{
-			cout << "Heap Sort = " << endl;
-			int *sortedMarks = heap_sort(marks, marksLength);
-			for (int i = 0; i < marksLength; ++i)
+			sortedarr[i] = arr[i];
+		}
+	}
+	void insert(int val)
+	{
+		if (pos < totalsize - 1)
+		{
+			arr[++pos] = val;
+		}
+		heapify(pos);
+		// sortedarr=arr;
+	}
+
+	void heapsort(int m = 0)
+	{
+		if (m == 0)
+		{
+
+			for (int i = 0; i < totalsize; i++)
 			{
-				cout << sortedMarks[i] << " ";
+				cout << delete1() << " ";
 			}
 			cout << endl;
-			break;
 		}
-
-		case 4: // Display heap
+		else
 		{
-			temp = heap.getMin();
-			if (temp != -1)
+			int arrmin[totalsize];
+			for (int i = totalsize - 1; i >= 0; i--)
 			{
-				heap.display();
+				arrmin[i] = delete1();
+				// cout<<delete1()<<" ";
 			}
-			else
+			cout << "done" << endl;
+			for (int i = 0; i < totalsize; i++)
 			{
-				for (int i = 0; i < marksLength; ++i)
-				{
-					heap.insert(marks[i]);
-				}
-				heap.display();
+				cout << arrmin[i] << " ";
 			}
-			break;
-		}
-
-		case 5: // Exit
-		{
-			cout << "Thank you :)" << endl;
-			break;
-		}
-
-		default: // Forced exit
-		{
-			cout << "Exit due to wrong input!!!!!" << endl;
-			exit(0);
-		}
+			cout << endl;
 		}
 	}
+	int delete1()
+	{
 
+		int todel = arr[0];
+		arr[0] = 0;
+		for (int i = 1; i < totalsize; i++)
+		{
+			heapify(i);
+		}
+		return todel;
+	}
+	void display()
+	{
+		cout << "\nDisplay: " << endl;
+		for (int i = 0; i < totalsize; i++)
+		{
+			cout << sortedarr[i] << " ";
+		}
+		cout << endl;
+	}
+};
+int main()
+{
+	heap h(9);
+	h.insert(50);
+	h.insert(10);
+	h.insert(60);
+	h.insert(80);
+	h.insert(40);
+	h.insert(5);
+	h.insert(20);
+	h.insert(12);
+	h.insert(15);
+	h.saveorignal();
+	h.display();
+	cout << "Aplyingheap sort" << endl;
+
+	// 0 for max, 1 for min
+	h.heapsort(0);
+	h.display();
 	return 0;
 }
-
-template <class T>
-void MinHeap<T>::insert(T data)
-{
-	if (size == capacity)
-	{
-		cout << "Overflow: could not insert key" << endl;
-	}
-	else
-	{
-
-		size++;
-		int i = size - 1;
-		arr[i] = data;
-
-	
-		while (i >= 0 && arr[this->parent(i)] > arr[i])
-		{
-		
-			swap(parent(i), i);
-		
-			i = this->parent(i);
-		}
-	}
-}
-
-template <class T>
-T MinHeap<T>::getMin()
-{
-	if (size <= 1) 
-	{
-		cout << "Underflow: no element in heap" << endl;
-		return -1;
-	}
-	else
-	{ 
-		return arr[0];
-	}
-}
-
-template <class T>
-void MinHeap<T>::heapify(int i)
-{
-	int l = Lchild(i);
-	int r = Rchild(i);
-
-	int smallest = i;
-
-	if (l < size && arr[l] < arr[smallest])
-	{
-		smallest = l;
-	}
-	if (r < size && arr[r] < arr[smallest])
-	{
-		smallest = r;
-	}
-
-	if (smallest != i)
-	{
-		swap(i, smallest);
-		heapify(smallest);
-	}
-}
-
-template <class T>
-void MinHeap<T>::heapify_itr()
-{ 
-	MinHeap<T> tempHeap(this->capacity);
-
-	for (int i = 0; i < size; ++i)
-	{ 
-		tempHeap.insert(this->arr[i]);
-	}
-
-	for (int i = 0; i < size; ++i)
-	{
-		this->arr[i] = tempHeap.arr[i];
-	}
-}
-
-template <class T>
-void MinHeap<T>::display()
-{
-	cout << "Level Order Traversal: ";
-	for (int i = 0; i < size; ++i)
-	{ 
-		cout << arr[i] << " ";
-	}
-	cout << endl;
-}
-
-template <class T>
-void MinHeap<T>::remove(int i)
-{
-	this->bubble_key_to_top(i); 
-	this->extract_min_key();
-}
-
-template <class T>
-T MinHeap<T>::extract_min_key()
-{
-	T minKey = arr[0];
-	arr[0] = arr[size - 1];
-	size--;
-	heapify_itr();
-
-	return minKey;
-}
-
-template <class T>
-void MinHeap<T>::bubble_key_to_top(int i)
-{
-	arr[i] = INT_MIN;
-	while (i != 0 && arr[parent(i)] > arr[i])
-	{
-		swap(parent(i), i);
-		i = parent(i);
-	}
-}
-
-
